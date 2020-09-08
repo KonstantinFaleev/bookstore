@@ -1,0 +1,16 @@
+require:
+  - rubocop-rspec
+  - rubocop-rails
+  - rubocop-performance
+
+AllCops:
+  TargetRubyVersion: 2.7.1
+  NewCops: enable
+  DisplayCopNames: true
+  DisplayStyleGuide: true
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
