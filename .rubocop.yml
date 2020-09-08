@@ -9,8 +9,11 @@ AllCops:
   DisplayCopNames: true
   DisplayStyleGuide: true
 
+Style/Documentation:
+  Enabled: false
+
 Style/FrozenStringLiteralComment:
   Enabled: false
 
-Style/Documentation:
+Style/RedundantFetchBlock:
   Enabled: false
