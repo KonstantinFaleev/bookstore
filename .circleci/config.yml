@@ -5,7 +5,7 @@ executors:
     working_directory: ~/bookstore
     description: BookStore
     docker:
-      - image: circleci/ruby:2.7.1
+      - image: circleci/ruby:2.7.1-node
         environment:
           DATABASE_URL: "postgres://localhost/test-postgresql"
           PGHOST: 127.0.0.1
@@ -16,6 +16,8 @@ executors:
 caches:
   - &bundle_cache_full v1-book_store-{{ checksum "Gemfile.lock" }}
   - &bundle_cache v1-book_store
+  - &yarn_cache_full v1-book_store-{{ checksum "yarn.lock" }}
+  - &yarn_cache v1-book_store
 
 commands:
   setup_environment:
@@ -25,13 +27,24 @@ commands:
           keys:
             - *bundle_cache_full
             - *bundle_cache
+      - restore_cache:
+          keys:
+            - *yarn_cache_full
+            - *yarn_cache
       - run:
           name: Installing bundler dependencies
           command: bundle install --path vendor/bundle
+      - run:
+          name: Installing npm packages
+          command: yarn install --path node_modules
       - save_cache:
           paths:
             - vendor/bundle
           key: *bundle_cache_full
+      - save_cache:
+          paths:
+            - node_modules
+          key: *yarn_cache_full
       - run:
           name: Database setup
           command: rake db:create
