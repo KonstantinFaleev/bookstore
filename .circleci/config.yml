@@ -13,10 +13,9 @@ executors:
         environment:
           POSTGRES_USER: circleci
           POSTGRES_PASSWORD: ""
-
 caches:
-  - &bundle_cache_full v1-bookstore-{{ checksum "Gemfile.lock" }}
-  - &bundle_cache v1-bookstore
+  - &bundle_cache_full v1-book_store-{{ checksum "Gemfile.lock" }}
+  - &bundle_cache v1-book_store
   - &yarn_cache_full v1-book_store-{{ checksum "yarn.lock" }}
   - &yarn_cache v1-book_store
 
@@ -55,27 +54,29 @@ commands:
       - run:
           name: rubocop
           command: bundle exec rubocop
+      - run:
+          name: fasterer
+          command: bundle exec fasterer
   run_specs:
+    description: command to run specs
     steps:
       - run:
           name: run specs
-          command: |
-            bundle exec rspec --format progress \
-                              --format RspecJunitFormatter \
-                              --out /tmp/test-results/rspec/rspec.xml
-          when: always
-      - store_test_results:
-          path: /tmp/test-results/rspec/
+          command: bundle exec rspec
+      - store_artifacts:
+          path: ~/book-store/coverage
+          destination: coverage
+
 jobs:
   lintering:
     executor: default
     steps:
-      - defaults
+      - setup_environment
       - run_linters
   run_specs:
     executor: default
     steps:
-      - defaults
+      - setup_environment
       - run_specs
 
 workflows:
