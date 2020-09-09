@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 RSpec.describe PagesController do
   describe 'GET /index' do
     it '200 status code' do
