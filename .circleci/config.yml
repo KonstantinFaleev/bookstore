@@ -2,8 +2,8 @@ version: 2.1
 
 executors:
   default:
-    working_directory: ~/repo
-    description: The official CircleCI Ruby Docker image
+    working_directory: ~/bookstore
+    description: BookStore
     docker:
       - image: circleci/ruby:2.7.1
         environment:
@@ -15,26 +15,40 @@ executors:
           POSTGRES_PASSWORD: ""
 
 caches:
-  - &bundle_cache_full v2-repo-{{ checksum "Gemfile.lock" }}
-  - &bundle_cache v2-repo-
+  - &bundle_cache_full v1-bookstore-{{ checksum "Gemfile.lock" }}
+  - &bundle_cache v1-bookstore
+  - &yarn_cache_full v1-book_store-{{ checksum "yarn.lock" }}
+  - &yarn_cache v1-book_store
 
 commands:
-  defaults:
+  setup_environment:
     steps:
       - checkout
       - restore_cache:
           keys:
             - *bundle_cache_full
             - *bundle_cache
-      - run: bundle install --path vendor/bundle
+      - restore_cache:
+          keys:
+            - *yarn_cache_full
+            - *yarn_cache
+      - run:
+          name: Installing bundler dependencies
+          command: bundle install --path vendor/bundle
+      - run:
+          name: Installing npm packages
+          command: yarn install --path node_modules
       - save_cache:
-          key: *bundle_cache_full
           paths:
             - vendor/bundle
+          key: *bundle_cache_full
+      - save_cache:
+          paths:
+            - node_modules
+          key: *yarn_cache_full
       - run:
-        name: Database setup
-        command: |
-          bundle exec rake db:create
+          name: Database setup
+          command: rake db:create
   run_linters:
     description: command to start linters
     steps:
