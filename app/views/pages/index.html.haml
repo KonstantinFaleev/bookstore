@@ -27,7 +27,7 @@
               %p.lead Smart front-end techniques and design patterns derived from real-life responsive projects
               %p.lead.small Vitaly Friedman, Daniel Mall,Vitaly Friedman
               .general-align
-                %button.btn.btn-primary Buy Now
+                %button.btn.btn-primary #{I18n.t('pages.button_buy')}
     %a.left.carousel-control{href: "#slider", role: "button", 'data-slide': "prev"}
       %span.icon-prev{'aria-hidden': "true"}
       %span.sr-only Previous
@@ -36,12 +36,12 @@
       %span.sr-only Next
 .container
   .jumbotron.text-center.mb-0
-    %h2.h1 Welcome to our amazing Bookstore!
+    %h2.h1 #{I18n.t('pages.welcome')}
     .mb-res-50
-      %p We pore through hundreds of new books each month and select the five best we can find to share with our members.
-    %button.btn.btn-default Get Started
+      %p #{I18n.t('pages.welcome_title')}
+    %button.btn.btn-default #{I18n.t('pages.get_started')}
   .mb-35
-    %h3 Best Sellers
+    %h3 #{I18n.t('pages.best_sellers')}
     .row
       .col-sm-6.col-md-3
         .general-thumb-wrap
